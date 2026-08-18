@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Monitor, Smartphone, Activity, BarChart2, ShieldCheck, Zap } from 'lucide-react';
+import { Monitor, Smartphone, Activity, BarChart2, ShieldCheck, Zap, Rocket, Search, Eye } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 
 // Helper component for the SVG animated score circles
@@ -168,7 +168,22 @@ export default function Home() {
       <main>
         <section className="hero relative">
           <div className="glow-effect" style={{ top: '30%' }}></div>
-          <div className="container hero-container">
+          
+          {/* Floating Chips */}
+          <div className="floating-chip chip-1">
+            <Zap size={16} color="var(--accent-primary)" />
+            Sub-second Analysis
+          </div>
+          <div className="floating-chip chip-2">
+            <ShieldCheck size={16} color="#10b981" />
+            Core Web Vitals
+          </div>
+          <div className="floating-chip chip-3">
+            <Search size={16} color="#f59e0b" />
+            SEO Optimization
+          </div>
+
+          <div className="container hero-container relative z-10">
             <div className="badge">✨ New: Deep Interactive Diagnostics</div>
             <h1 className="headline">Instantly Uncover Your Website's Hidden Flaws</h1>
             <p className="sub-headline">Get a complete AI-driven analysis of your SEO, Performance, and UX in seconds.</p>
@@ -312,7 +327,94 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        {/* Features Section */}
+        <section className="features-section">
+          <div className="container">
+            <div className="section-header">
+              <h2 className="section-title">Everything you need to optimize your site</h2>
+              <p className="section-subtitle">Our AI-driven engine performs a comprehensive deep-dive into the metrics that actually matter for your user experience and search ranking.</p>
+            </div>
+            
+            <div className="features-grid">
+              <div className="feature-card">
+                <div className="feature-icon-wrapper">
+                  <Rocket size={32} />
+                </div>
+                <h3 className="feature-title">Performance Profiling</h3>
+                <p className="feature-desc">We analyze First Contentful Paint, Time to Interactive, and Core Web Vitals to ensure your site loads blisteringly fast on any connection.</p>
+              </div>
+              
+              <div className="feature-card">
+                <div className="feature-icon-wrapper">
+                  <Eye size={32} />
+                </div>
+                <h3 className="feature-title">Accessibility Scoring</h3>
+                <p className="feature-desc">Discover contrast issues, missing aria-labels, and structural flaws. We make sure your website is perfectly usable for every single visitor.</p>
+              </div>
+              
+              <div className="feature-card">
+                <div className="feature-icon-wrapper">
+                  <Search size={32} />
+                </div>
+                <h3 className="feature-title">Technical SEO</h3>
+                <p className="feature-desc">Uncover missing meta tags, broken links, and indexing blockers. Our crawler ensures search engines can understand and rank your content highly.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </main>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="container">
+          <div className="footer-grid">
+            <div className="footer-brand">
+              <a href="#" className="logo">
+                <Activity className="text-accent-primary" size={24} color="var(--accent-primary)" />
+                AI Site Auditor
+              </a>
+              <p>The most advanced, AI-powered website diagnostic engine. Stop guessing why your conversion rate is low, and start fixing it.</p>
+            </div>
+            
+            <div>
+              <h4 className="footer-title">Product</h4>
+              <ul className="footer-links">
+                <li><a href="#">Features</a></li>
+                <li><a href="#">Pricing</a></li>
+                <li><a href="#">Agency API</a></li>
+                <li><a href="#">Documentation</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="footer-title">Company</h4>
+              <ul className="footer-links">
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Contact Support</a></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="footer-bottom">
+            <p>&copy; {new Date().getFullYear()} AI Site Auditor. All rights reserved.</p>
+            <div className="social-icons">
+              <a href="#" aria-label="Twitter">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+              </a>
+              <a href="#" aria-label="GitHub">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.8c0-1.2-.4-2.4-1.2-3.2 3-.3 6-1.5 6-6.5 0-1.4-.5-2.7-1.4-3.7.1-.3.6-1.7-.1-3.6 0 0-1.2-.4-3.8 1.4-1.1-.3-2.3-.5-3.5-.5s-2.4.2-3.5.5c-2.6-1.8-3.8-1.4-3.8-1.4-.7 1.9-.2 3.3-.1 3.6-.9 1-1.4 2.3-1.4 3.7 0 5 3 6.2 6 6.5-.8.8-1.2 2-1.2 3.2V23"></path></svg>
+              </a>
+              <a href="#" aria-label="LinkedIn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </>
   );
 }
