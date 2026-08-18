@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Site Auditor - Instantly Uncover Your Website's Hidden Flaws</title>
+    <meta name="description" content="Get a complete AI-driven analysis of your SEO, Performance, and UX in seconds with AI Site Auditor.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                AI Site Auditor
+            </a>
+            <div class="nav-links">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <svg id="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg id="sun-icon" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+                <a href="#" class="nav-link">Login / Agency Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-container">
+                <div class="badge">✨ New: Advanced UX/UI Analysis Engine</div>
+                <h1 class="headline">Instantly Uncover Your Website's Hidden Flaws</h1>
+                <p class="sub-headline">Get a complete AI-driven analysis of your SEO, Performance, and UX in seconds.</p>
+                
+                <form class="audit-form" id="audit-form">
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </div>
+                        <input type="url" id="url-input" placeholder="https://yourwebsite.com..." required aria-label="Website URL">
+                        <button type="submit" class="btn-primary">
+                            Get Your Free AI Audit
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="social-proof">
+                    <p>Trusted by 500+ agencies and freelancers</p>
+                    <div class="avatars">
+                        <!-- Simulated avatars for social proof -->
+                        <div class="avatar" style="background-image: url('https://i.pravatar.cc/100?img=1')"></div>
+                        <div class="avatar" style="background-image: url('https://i.pravatar.cc/100?img=2')"></div>
+                        <div class="avatar" style="background-image: url('https://i.pravatar.cc/100?img=3')"></div>
+                        <div class="avatar" style="background-image: url('https://i.pravatar.cc/100?img=4')"></div>
+                        <div class="avatar" style="background-image: url('https://i.pravatar.cc/100?img=5')"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="teaser-section">
+            <div class="container teaser-container">
+                <div class="teaser-graphic">
+                    <img src="mockup.jpg" alt="AI Website Auditor Dashboard Mockup showing SEO scores and performance metrics" class="dashboard-img">
+                    <div class="glow-effect"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Theme toggling logic
+        const themeToggle = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+
+        // Check for saved user preference, if any, on load of the website
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'dark') {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // Default to dark mode if user prefers it
+            document.documentElement.setAttribute('data-theme', 'dark');
+            sunIcon.classList.remove('hidden');
+            moonIcon.classList.add('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            let targetTheme = 'light';
+            
+            if (theme === 'light' || !theme) {
+                targetTheme = 'dark';
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                targetTheme = 'light';
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+            
+            document.documentElement.setAttribute('data-theme', targetTheme);
+            localStorage.setItem('theme', targetTheme);
+        });
+
+        // Form submission animation mock
+        const form = document.getElementById('audit-form');
+        const btn = form.querySelector('.btn-primary');
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loader"></span> Analyzing...';
+            btn.classList.add('loading');
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('loading');
+                // Scroll to the mockup to tease the user
+                const teaser = document.querySelector('.teaser-section');
+                teaser.scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
