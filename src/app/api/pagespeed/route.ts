@@ -10,8 +10,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'URL is required' }, { status: 400 });
     }
 
-    // Use environment variable for Google API Key (optional but recommended for production)
-    const apiKey = process.env.GOOGLE_API_KEY || '';
+    // Use environment variable for Google API Key
+    // We access it dynamically so the build tool doesn't inline the secret string into the cache
+    const keyName = 'GOOGLE_API_KEY';
+    const apiKey = process.env[keyName] || '';
     
     // Construct the PageSpeed Insights API URL
     // We request multiple categories to get a complete Lighthouse score profile
