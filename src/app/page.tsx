@@ -41,7 +41,7 @@ export default function Home() {
     setResults(null);
 
     try {
-      // Split into two requests to avoid 10s Vercel limit timeout
+      // Split into two requests
       const [desktopRes, mobileRes] = await Promise.allSettled([
         fetch('/api/pagespeed', {
           method: 'POST',
@@ -58,13 +58,16 @@ export default function Home() {
       const desktopData = desktopRes.status === 'fulfilled' ? desktopRes.value : { error: 'Failed to fetch desktop' };
       const mobileData = mobileRes.status === 'fulfilled' ? mobileRes.value : { error: 'Failed to fetch mobile' };
 
-      if (desktopData.error && mobileData.error) {
-        throw new Error(desktopData.error || mobileData.error);
+      const desktopFailed = !!desktopData.error || !!desktopData.errorMessage || !desktopData.metrics;
+      const mobileFailed = !!mobileData.error || !!mobileData.errorMessage || !mobileData.metrics;
+
+      if (desktopFailed && mobileFailed) {
+        throw new Error(desktopData.error || desktopData.errorMessage || mobileData.error || mobileData.errorMessage || 'Both mobile and desktop audits timed out. Please try again.');
       }
 
       setResults({
-        desktop: !desktopData.error ? desktopData.metrics : null,
-        mobile: !mobileData.error ? mobileData.metrics : null,
+        desktop: !desktopFailed ? desktopData.metrics : null,
+        mobile: !mobileFailed ? mobileData.metrics : null,
       });
 
       // Scroll to results
