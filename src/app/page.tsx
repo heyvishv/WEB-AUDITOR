@@ -47,6 +47,114 @@ function AnimatedMetricCircle({ label, score, delay = 0 }: { label: string, scor
   );
 }
 
+const DEMO_RESULTS = {
+  desktop: { performance: 98, accessibility: 100, bestPractices: 92, seo: 100 },
+  mobile: { performance: 85, accessibility: 98, bestPractices: 92, seo: 100 }
+};
+
+const DEMO_CHART_DATA = [
+  { name: 'Performance', Desktop: 98, Mobile: 85 },
+  { name: 'Accessibility', Desktop: 100, Mobile: 98 },
+  { name: 'Best Practices', Desktop: 92, Mobile: 92 },
+  { name: 'SEO', Desktop: 100, Mobile: 100 },
+];
+
+function DashboardView({ results, chartData, targetUrl, isDemo }: { results: any, chartData: any, targetUrl: string, isDemo?: boolean }) {
+  let hostname = "example.com";
+  try {
+    hostname = new URL(targetUrl).hostname;
+  } catch (e) {}
+
+  return (
+    <section id="results-section" className="teaser-section" style={{ opacity: isDemo ? 0.9 : 1, position: 'relative' }}>
+      <div className="container" style={{ maxWidth: '1200px', position: 'relative' }}>
+         {isDemo && (
+           <div style={{ position: 'absolute', top: '-40px', left: '50%', transform: 'translateX(-50%)', background: 'var(--accent-primary)', color: 'white', padding: '0.5rem 1.5rem', borderRadius: '99px', fontSize: '0.875rem', fontWeight: 600, zIndex: 20, boxShadow: '0 4px 14px 0 var(--accent-glow)' }}>
+             Interactive Live Demo
+           </div>
+         )}
+         <h2 style={{ textAlign: 'center', fontSize: '2.5rem', marginBottom: '3rem', filter: isDemo ? 'blur(0.5px)' : 'none' }}>
+            Diagnostics for <span style={{ color: 'var(--accent-primary)' }}>{hostname}</span>
+         </h2>
+         
+         <div className="results-grid" style={{ pointerEvents: isDemo ? 'auto' : 'auto' }}>
+           {/* Desktop Results Card */}
+           <div className="glass-card animate-fade-up">
+             <div className="glow-effect"></div>
+             <h3 className="card-title">
+                <Monitor size={28} color="var(--accent-primary)" />
+                Desktop Diagnostics
+             </h3>
+             {results.desktop ? (
+               <div className="metrics-grid">
+                  <AnimatedMetricCircle label="Performance" score={results.desktop.performance} delay={100} />
+                  <AnimatedMetricCircle label="Accessibility" score={results.desktop.accessibility} delay={200} />
+                  <AnimatedMetricCircle label="Best Practices" score={results.desktop.bestPractices} delay={300} />
+                  <AnimatedMetricCircle label="SEO" score={results.desktop.seo} delay={400} />
+               </div>
+             ) : (
+               <p style={{ color: 'var(--text-secondary)' }}>Failed to load desktop metrics.</p>
+             )}
+           </div>
+
+           {/* Mobile Results Card */}
+           <div className="glass-card animate-fade-up delay-100">
+             <div className="glow-effect"></div>
+             <h3 className="card-title">
+                <Smartphone size={28} color="var(--accent-primary)" />
+                Mobile Diagnostics
+             </h3>
+             {results.mobile ? (
+               <div className="metrics-grid">
+                  <AnimatedMetricCircle label="Performance" score={results.mobile.performance} delay={200} />
+                  <AnimatedMetricCircle label="Accessibility" score={results.mobile.accessibility} delay={300} />
+                  <AnimatedMetricCircle label="Best Practices" score={results.mobile.bestPractices} delay={400} />
+                  <AnimatedMetricCircle label="SEO" score={results.mobile.seo} delay={500} />
+               </div>
+             ) : (
+               <p style={{ color: 'var(--text-secondary)' }}>Failed to load mobile metrics.</p>
+             )}
+           </div>
+         </div>
+
+         {/* Interactive Chart Card */}
+         <div className="glass-card animate-fade-up delay-200" style={{ marginTop: '2rem' }}>
+            <h3 className="card-title">
+              <BarChart2 size={28} color="var(--accent-primary)" />
+              Cross-Platform Comparison
+            </h3>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
+              Hover over the bars to see exact score differences between Desktop and Mobile environments.
+            </p>
+            
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
+                  <XAxis dataKey="name" stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} />
+                  <YAxis stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} domain={[0, 100]} />
+                  <Tooltip 
+                    cursor={{ fill: 'var(--badge-bg)' }}
+                    contentStyle={{ 
+                      backgroundColor: 'var(--surface-color)', 
+                      border: '1px solid var(--border-color)',
+                      borderRadius: '12px',
+                      boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+                      color: 'var(--text-primary)'
+                    }} 
+                  />
+                  <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                  <Bar dataKey="Desktop" fill="var(--accent-primary)" radius={[6, 6, 0, 0]} maxBarSize={60} />
+                  <Bar dataKey="Mobile" fill="#10b981" radius={[6, 6, 0, 0]} maxBarSize={60} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+         </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const [theme, setTheme] = useState('light');
   const [url, setUrl] = useState('');
@@ -234,99 +342,12 @@ export default function Home() {
           </div>
         </section>
 
-        {results ? (
-          <section id="results-section" className="teaser-section">
-            <div className="container" style={{ maxWidth: '1200px' }}>
-               <h2 style={{ textAlign: 'center', fontSize: '2.5rem', marginBottom: '3rem' }}>
-                  Diagnostics for <span style={{ color: 'var(--accent-primary)' }}>{new URL(url).hostname}</span>
-               </h2>
-               
-               <div className="results-grid">
-                 {/* Desktop Results Card */}
-                 <div className="glass-card animate-fade-up">
-                   <div className="glow-effect"></div>
-                   <h3 className="card-title">
-                      <Monitor size={28} color="var(--accent-primary)" />
-                      Desktop Diagnostics
-                   </h3>
-                   {results.desktop ? (
-                     <div className="metrics-grid">
-                        <AnimatedMetricCircle label="Performance" score={results.desktop.performance} delay={100} />
-                        <AnimatedMetricCircle label="Accessibility" score={results.desktop.accessibility} delay={200} />
-                        <AnimatedMetricCircle label="Best Practices" score={results.desktop.bestPractices} delay={300} />
-                        <AnimatedMetricCircle label="SEO" score={results.desktop.seo} delay={400} />
-                     </div>
-                   ) : (
-                     <p style={{ color: 'var(--text-secondary)' }}>Failed to load desktop metrics.</p>
-                   )}
-                 </div>
-
-                 {/* Mobile Results Card */}
-                 <div className="glass-card animate-fade-up delay-100">
-                   <div className="glow-effect"></div>
-                   <h3 className="card-title">
-                      <Smartphone size={28} color="var(--accent-primary)" />
-                      Mobile Diagnostics
-                   </h3>
-                   {results.mobile ? (
-                     <div className="metrics-grid">
-                        <AnimatedMetricCircle label="Performance" score={results.mobile.performance} delay={200} />
-                        <AnimatedMetricCircle label="Accessibility" score={results.mobile.accessibility} delay={300} />
-                        <AnimatedMetricCircle label="Best Practices" score={results.mobile.bestPractices} delay={400} />
-                        <AnimatedMetricCircle label="SEO" score={results.mobile.seo} delay={500} />
-                     </div>
-                   ) : (
-                     <p style={{ color: 'var(--text-secondary)' }}>Failed to load mobile metrics.</p>
-                   )}
-                 </div>
-               </div>
-
-               {/* Interactive Chart Card */}
-               <div className="glass-card animate-fade-up delay-200" style={{ marginTop: '2rem' }}>
-                  <h3 className="card-title">
-                    <BarChart2 size={28} color="var(--accent-primary)" />
-                    Cross-Platform Comparison
-                  </h3>
-                  <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-                    Hover over the bars to see exact score differences between Desktop and Mobile environments.
-                  </p>
-                  
-                  <div className="chart-container">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
-                        <XAxis dataKey="name" stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} />
-                        <YAxis stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} domain={[0, 100]} />
-                        <Tooltip 
-                          cursor={{ fill: 'var(--badge-bg)' }}
-                          contentStyle={{ 
-                            backgroundColor: 'var(--surface-color)', 
-                            border: '1px solid var(--border-color)',
-                            borderRadius: '12px',
-                            boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-                            color: 'var(--text-primary)'
-                          }} 
-                        />
-                        <Legend wrapperStyle={{ paddingTop: '20px' }} />
-                        <Bar dataKey="Desktop" fill="var(--accent-primary)" radius={[6, 6, 0, 0]} maxBarSize={60} />
-                        <Bar dataKey="Mobile" fill="#10b981" radius={[6, 6, 0, 0]} maxBarSize={60} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-               </div>
-
-            </div>
-          </section>
-        ) : (
-          <section className="teaser-section">
-            <div className="container teaser-container">
-              <div className="teaser-graphic">
-                <img src="/mockup.jpg" alt="AI Website Auditor Dashboard Mockup" className="dashboard-img" />
-                <div className="glow-effect"></div>
-              </div>
-            </div>
-          </section>
-        )}
+        <DashboardView 
+          results={results || DEMO_RESULTS} 
+          chartData={results ? chartData : DEMO_CHART_DATA} 
+          targetUrl={results ? url : "https://example.com"} 
+          isDemo={!results} 
+        />
 
         {/* Features Section */}
         <section className="features-section">
