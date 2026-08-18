@@ -41,33 +41,44 @@ export default function Home() {
     setResults(null);
 
     try {
-      // Split into two requests
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY || '';
+      const getApiUrl = (strategy: string) => 
+        `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO${apiKey ? `&key=${apiKey}` : ''}`;
+
+      // Fetch directly from Google in the browser to bypass any Netlify server timeouts (10s limit)
       const [desktopRes, mobileRes] = await Promise.allSettled([
-        fetch('/api/pagespeed', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url, strategy: 'desktop' }),
-        }).then(res => res.json()),
-        fetch('/api/pagespeed', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url, strategy: 'mobile' }),
-        }).then(res => res.json())
+        fetch(getApiUrl('desktop')).then(res => res.json()),
+        fetch(getApiUrl('mobile')).then(res => res.json())
       ]);
 
-      const desktopData = desktopRes.status === 'fulfilled' ? desktopRes.value : { error: 'Failed to fetch desktop' };
-      const mobileData = mobileRes.status === 'fulfilled' ? mobileRes.value : { error: 'Failed to fetch mobile' };
+      const desktopData = desktopRes.status === 'fulfilled' ? desktopRes.value : { error: { message: 'Failed to fetch desktop' } };
+      const mobileData = mobileRes.status === 'fulfilled' ? mobileRes.value : { error: { message: 'Failed to fetch mobile' } };
 
-      const desktopFailed = !!desktopData.error || !!desktopData.errorMessage || !desktopData.metrics;
-      const mobileFailed = !!mobileData.error || !!mobileData.errorMessage || !mobileData.metrics;
+      const extractMetrics = (data: any) => {
+        if (data.error || !data.lighthouseResult?.categories) return null;
+        const cats = data.lighthouseResult.categories;
+        return {
+          performance: cats.performance?.score ? Math.round(cats.performance.score * 100) : null,
+          accessibility: cats.accessibility?.score ? Math.round(cats.accessibility.score * 100) : null,
+          bestPractices: cats['best-practices']?.score ? Math.round(cats['best-practices'].score * 100) : null,
+          seo: cats.seo?.score ? Math.round(cats.seo.score * 100) : null,
+        };
+      };
 
-      if (desktopFailed && mobileFailed) {
-        throw new Error(desktopData.error || desktopData.errorMessage || mobileData.error || mobileData.errorMessage || 'Both mobile and desktop audits timed out. Please try again.');
+      const desktopMetrics = extractMetrics(desktopData);
+      const mobileMetrics = extractMetrics(mobileData);
+
+      if (!desktopMetrics && !mobileMetrics) {
+        const errorMsg = desktopData.error?.message || mobileData.error?.message || 'Both mobile and desktop audits failed.';
+        if (errorMsg.includes('Quota exceeded')) {
+          throw new Error('Google API Quota Exceeded. You need to add NEXT_PUBLIC_GOOGLE_API_KEY in your Netlify settings.');
+        }
+        throw new Error(errorMsg);
       }
 
       setResults({
-        desktop: !desktopFailed ? desktopData.metrics : null,
-        mobile: !mobileFailed ? mobileData.metrics : null,
+        desktop: desktopMetrics,
+        mobile: mobileMetrics,
       });
 
       // Scroll to results
