@@ -19,6 +19,9 @@ export async function POST(request: Request) {
     const data = await response.json();
 
     if (data.error) {
+        if (data.error.message.includes('Quota exceeded')) {
+             return NextResponse.json({ error: 'Google API Quota Exceeded. You need to add your GOOGLE_API_KEY in your Netlify Environment Variables to fix this!' }, { status: 500 });
+        }
         return NextResponse.json({ error: data.error.message }, { status: 500 });
     }
 
